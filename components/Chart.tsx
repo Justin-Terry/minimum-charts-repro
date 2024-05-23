@@ -41,7 +41,7 @@ export const Chart: FC<ChartProps> = ({
                 setChartWidth(e.nativeEvent.layout.width - LABEL_WIDTH - 32)
             }>
             <BarChart
-                isAnimated={true}
+                isAnimated={false}
                 animationDuration={250}
                 data={data}
                 endSpacing={0}
