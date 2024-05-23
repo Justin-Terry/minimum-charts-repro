@@ -1,70 +1,151 @@
-import { Image, StyleSheet, Platform } from 'react-native';
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import { FC, useMemo, useState } from 'react'
+import {
+    Button,
+    ScrollView,
+    StyleSheet, View,
+} from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import {Chart} from "@/components/Chart";
 
-export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({ ios: 'cmd + d', android: 'cmd + m' })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
-  );
+const tempDayData = [
+    { value: 0 },
+    { value: 50 },
+    { value: 100 },
+    { value: 150 },
+    { value: 200 },
+    { value: 250 },
+    { value: 300 },
+    { value: 350 },
+    { value: 400 },
+    { value: 450 },
+    { value: 500 },
+    { value: 550 },
+    { value: 600 },
+    { value: 650 },
+    { value: 700 },
+    { value: 750 },
+    { value: 800 },
+    { value: 850 },
+    { value: 900 },
+    { value: 950 },
+    { value: 1000 },
+    { value: 1050 },
+    { value: 1100 },
+    { value: 1150 },
+]
+
+const tempWeekData = [
+    { value: 0 },
+    { value: 100 },
+    { value: 200 },
+    { value: 300 },
+    { value: 400 },
+    { value: 500 },
+    { value: 600 },
+]
+
+const tempMonthData = [
+    { value: 0 },
+    { value: 35 },
+    { value: 70 },
+    { value: 105 },
+    { value: 140 },
+    { value: 175 },
+    { value: 210 },
+    { value: 245 },
+    { value: 280 },
+    { value: 315 },
+    { value: 350 },
+    { value: 385 },
+    { value: 420 },
+    { value: 455 },
+    { value: 490 },
+    { value: 525 },
+    { value: 560 },
+    { value: 595 },
+    { value: 630 },
+    { value: 665 },
+    { value: 700 },
+    { value: 735 },
+    { value: 770 },
+    { value: 805 },
+    { value: 840 },
+    { value: 875 },
+    { value: 910 },
+    { value: 945 },
+    { value: 980 },
+    { value: 1015 },
+    { value: 1050 },
+]
+
+interface HomeScreenProps {}
+
+export enum AggregationLevel {
+    DAY = 'day',
+    WEEK = 'week',
+    MONTH = 'month',
 }
 
+const HomeScreen: FC<HomeScreenProps> = () => {
+    const [aggregationLevel, setAggregationLevel] =
+        useState<AggregationLevel>(AggregationLevel.DAY)
+
+    const data = useMemo(() => {
+        switch (aggregationLevel) {
+            case AggregationLevel.DAY:
+                return tempDayData
+            case AggregationLevel.WEEK:
+                return tempWeekData
+            case AggregationLevel.MONTH:
+                return tempMonthData
+        }
+    }, [
+        tempDayData, tempWeekData, tempMonthData,
+        aggregationLevel,
+    ])
+
+    return (
+        <SafeAreaView style={styles.page} edges={['bottom']}>
+            <ScrollView
+                style={styles.page}
+                contentContainerStyle={styles.pageContent}>
+                <View style={styles.buttonWrapper}>
+                    <Button
+                        title={'DAY'}
+                        onPress={() => setAggregationLevel(AggregationLevel.DAY)}
+                    />
+                    <Button
+                        title={'WEEK'}
+                        onPress={() => setAggregationLevel(AggregationLevel.WEEK)}
+                    />
+                    <Button
+                        title={'MONTH'}
+                        onPress={() => setAggregationLevel(AggregationLevel.MONTH)}
+                    />
+                </View>
+                <Chart data={data} aggregationLevel={aggregationLevel} />
+            </ScrollView>
+        </SafeAreaView>
+    )
+}
+
+export default HomeScreen
+
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
+        page: {
+            flex: 1,
+        },
+        buttonWrapper: {
+            margin: 24,
+            width: '100%',
+            flexDirection: 'row',
+            justifyContent: 'space-between'
+        },
+        pageContent: {
+            flexGrow: 1,
+            paddingTop: 24,
+            paddingHorizontal: 16,
+            alignItems: 'center',
+        },
+    })
