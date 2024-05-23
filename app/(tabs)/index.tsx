@@ -1,12 +1,14 @@
 
-import { FC, useMemo, useState } from 'react'
+import {FC, useState} from 'react'
 import {
-    Button,
-    ScrollView,
+    Button, Dimensions,
     StyleSheet, View,
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import {Chart} from "@/components/Chart";
+import {BarChart} from "react-native-gifted-charts";
+
+const BAR_SPACING = 3
+
 
 const tempDayData = [
     { value: 0 },
@@ -81,51 +83,44 @@ const tempMonthData = [
 
 interface HomeScreenProps {}
 
-export enum AggregationLevel {
-    DAY = 'day',
-    WEEK = 'week',
-    MONTH = 'month',
-}
-
 const HomeScreen: FC<HomeScreenProps> = () => {
-    const [aggregationLevel, setAggregationLevel] =
-        useState<AggregationLevel>(AggregationLevel.DAY)
-
-    const data = useMemo(() => {
-        switch (aggregationLevel) {
-            case AggregationLevel.DAY:
-                return tempDayData
-            case AggregationLevel.WEEK:
-                return tempWeekData
-            case AggregationLevel.MONTH:
-                return tempMonthData
-        }
-    }, [
-        tempDayData, tempWeekData, tempMonthData,
-        aggregationLevel,
-    ])
+    const [data, setData] = useState(tempDayData)
+    const [chartWidth, setChartWidth] = useState(Dimensions.get('screen').width)
 
     return (
-        <SafeAreaView style={styles.page} edges={['bottom']}>
-            <ScrollView
-                style={styles.page}
-                contentContainerStyle={styles.pageContent}>
+        <SafeAreaView style={styles.page} edges={['top']}>
                 <View style={styles.buttonWrapper}>
                     <Button
                         title={'DAY'}
-                        onPress={() => setAggregationLevel(AggregationLevel.DAY)}
+                        onPress={() => setData(tempDayData)}
                     />
                     <Button
                         title={'WEEK'}
-                        onPress={() => setAggregationLevel(AggregationLevel.WEEK)}
+                        onPress={() => setData(tempWeekData)}
                     />
                     <Button
                         title={'MONTH'}
-                        onPress={() => setAggregationLevel(AggregationLevel.MONTH)}
+                        onPress={() => setData(tempMonthData)}
                     />
                 </View>
-                <Chart data={data} />
-            </ScrollView>
+                <BarChart
+                    isAnimated={true}
+                    animationDuration={500}
+                    data={data}
+                    endSpacing={0}
+                    xAxisTextNumberOfLines={2}
+                    width={chartWidth}
+                    noOfSections={4}
+                    hideOrigin
+                    xAxisColor={'black'}
+                    xAxisLabelsHeight={16}
+                    spacing={BAR_SPACING}
+                    barWidth={10}
+                    height={chartWidth / 2}
+                    yAxisColor={'transparent'}
+                    frontColor={'black'}
+                    barBorderRadius={24}
+                />
         </SafeAreaView>
     )
 }
@@ -135,10 +130,10 @@ export default HomeScreen
 const styles = StyleSheet.create({
         page: {
             flex: 1,
+            backgroundColor: 'white'
         },
         buttonWrapper: {
             margin: 24,
-            width: '100%',
             flexDirection: 'row',
             justifyContent: 'space-between'
         },
