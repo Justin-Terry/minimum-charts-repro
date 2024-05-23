@@ -124,7 +124,7 @@ const HomeScreen: FC<HomeScreenProps> = () => {
                         onPress={() => setAggregationLevel(AggregationLevel.MONTH)}
                     />
                 </View>
-                <Chart data={data} aggregationLevel={aggregationLevel} />
+                <Chart data={data} />
             </ScrollView>
         </SafeAreaView>
     )

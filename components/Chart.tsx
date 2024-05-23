@@ -1,23 +1,16 @@
 import { FC, useMemo, useState } from 'react'
-import { Platform, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { BarChart } from 'react-native-gifted-charts'
 import { barDataItem } from 'gifted-charts-core/src/BarChart/types'
-import {AggregationLevel} from "@/app/(tabs)";
 
 interface ChartProps {
     data: barDataItem[]
-    aggregationLevel: AggregationLevel
 }
 
 export const LABEL_WIDTH = 40
 export const BAR_SPACING = 3
-
-const dayCharacterLabels = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
-const timeOfDayLabels = ['12a', '4a', '8a', '12p', '4p', '8p', '11p']
-
 export const Chart: FC<ChartProps> = ({
                                                                     data,
-                                                                    aggregationLevel,
                                                                 }) => {
     const [chartWidth, setChartWidth] = useState(0)
     const barWidth = useMemo(() => {
