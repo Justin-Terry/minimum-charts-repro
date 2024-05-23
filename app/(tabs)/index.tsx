@@ -107,19 +107,10 @@ const HomeScreen: FC<HomeScreenProps> = () => {
                     isAnimated={true}
                     animationDuration={500}
                     data={data}
-                    endSpacing={0}
-                    xAxisTextNumberOfLines={2}
                     width={chartWidth}
-                    noOfSections={4}
-                    hideOrigin
-                    xAxisColor={'black'}
-                    xAxisLabelsHeight={16}
                     spacing={BAR_SPACING}
-                    barWidth={10}
+                    barWidth={8}
                     height={chartWidth / 2}
-                    yAxisColor={'transparent'}
-                    frontColor={'black'}
-                    barBorderRadius={24}
                 />
         </SafeAreaView>
     )
